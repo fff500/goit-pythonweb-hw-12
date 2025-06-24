@@ -9,7 +9,19 @@ from src.conf.config import settings
 from src.services.auth import create_email_token
 
 
-async def send_email(email: str, username: str, host: URL):
+async def send_email(email: str, username: str, host: URL) -> None:
+    """
+    Send a confirmation email to the user.
+
+    Args:
+        email (str): The email address of the user.
+        username (str): The username of the user.
+        host (URL): The host URL for the application.
+
+    Returns:
+        None
+    """
+
     message = MIMEMultipart()
     message["From"] = settings.MAIL_FROM
     message["To"] = email

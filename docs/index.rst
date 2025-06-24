@@ -6,27 +6,86 @@
 Contact Manager documentation
 =============================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
-
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-REST API main
-===================
-.. automodule:: main
+=========
+API Layer
+=========
+
+API Users
+=========
+.. automodule:: src.api.users
   :members:
-  :undoc-members:
   :show-inheritance:
 
-REST API repository Notes
-=========================
+API Auth
+========
+.. automodule:: src.api.auth
+  :members:
+  :show-inheritance:
+
+API Utils
+=========
+.. automodule:: src.api.utils
+  :members:
+  :show-inheritance:
+
+API Contacts
+============
+.. automodule:: src.api.contacts
+  :members:
+  :show-inheritance:
+
+================
+Repository Layer
+================
+
+Repository Contacts
+===================
 .. automodule:: src.repository.contacts
   :members:
-  :undoc-members:
+  :show-inheritance:
+
+Repository Users
+================
+.. automodule:: src.repository.users
+  :members:
+  :show-inheritance:
+
+==============
+Services Layer
+==============
+
+Service Contacts
+================
+.. automodule:: src.services.contacts
+  :members:
+  :show-inheritance:
+
+Service Auth
+============
+.. automodule:: src.services.auth
+  :members:
+  :show-inheritance:
+
+Service Users
+=============
+.. automodule:: src.services.users
+  :members:
+  :show-inheritance:
+
+Email Service
+=============
+.. automodule:: src.services.email
+  :members:
+  :show-inheritance:
+
+Upload File Service
+===================
+.. automodule:: src.services.upload_file
+  :members:
   :show-inheritance:
 
 Indices and tables

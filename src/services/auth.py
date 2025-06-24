@@ -9,6 +9,8 @@ from jose import JWTError, jwt
 from src.services.users import UserService
 from src.database.db import get_db
 from src.conf.config import settings
+from src.schemas import Token, UserModel
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
@@ -23,7 +25,18 @@ class Hash:
         return self.pwd_context.hash(password)
 
 
-async def create_access_token(data: dict, expires_delta: Optional[int] = None):
+async def create_access_token(data: dict, expires_delta: Optional[int] = None) -> Token:
+    """
+    Create an access token for the user.
+
+    Args:
+        data (dict): The data to encode in the token.
+        expires_delta (Optional[int]): The expiration time in seconds
+
+    Returns:
+        Token: The encoded JWT token.
+    """
+
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(UTC) + datetime.timedelta(seconds=expires_delta)
@@ -38,7 +51,17 @@ async def create_access_token(data: dict, expires_delta: Optional[int] = None):
 
 async def get_current_user(
     token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)
-):
+) -> UserModel:
+    """
+    Get the current user based on the provided JWT token.
+
+    Args:
+        token (str): The JWT token provided by the user.
+        db (AsyncSession): The database session dependency.
+
+    Returns:
+        UserModel: The user model of the currently authenticated user.
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -61,7 +84,17 @@ async def get_current_user(
     return user
 
 
-async def get_email_from_token(token: str):
+async def get_email_from_token(token: str) -> str:
+    """
+    Get the email from the JWT token.
+
+    Args:
+        token (str): The JWT token containing the email.
+
+    Returns:
+        str: The email extracted from the token.
+    """
+
     try:
         payload = jwt.decode(
             token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM]
@@ -75,7 +108,17 @@ async def get_email_from_token(token: str):
         )
 
 
-def create_email_token(data: dict):
+def create_email_token(data: dict) -> Token:
+    """
+    Create an email verification token.
+
+    Args:
+        data (dict): The data to encode in the token.
+
+    Returns:
+        Token: The encoded JWT token for email verification.
+    """
+
     to_encode = data.copy()
     expire = datetime.now(UTC) + timedelta(days=7)
     to_encode.update({"iat": datetime.now(UTC), "exp": expire})

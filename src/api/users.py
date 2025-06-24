@@ -20,7 +20,20 @@ limiter = Limiter(key_func=get_remote_address)
     "/me", response_model=UserModel, description="No more than 2 requests per minute"
 )
 @limiter.limit("2/minute")
-async def me(request: Request, user: UserModel = Depends(get_current_user)):
+async def me(
+    request: Request, user: UserModel = Depends(get_current_user)
+) -> UserModel:
+    """
+    Get the current authenticated user.
+
+    Args:
+        request (Request): The request object.
+        user (UserModel): The current authenticated user.
+
+    Returns:
+        UserModel: The current authenticated user.
+    """
+
     return user
 
 
@@ -29,7 +42,19 @@ async def update_avatar_user(
     file: UploadFile = File(),
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> UserModel:
+    """
+    Update the avatar of the current user.
+
+    Args:
+        file (UploadFile): The new avatar file to upload.
+        user (User): The current authenticated user.
+        db (AsyncSession): The database session dependency.
+
+    Returns:
+        UserModel: The user with the updated avatar URL.
+    """
+
     avatar_url = UploadFileService(
         settings.CLOUDINARY_NAME,
         settings.CLOUDINARY_API_KEY,
