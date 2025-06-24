@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "contact-manager"
+version = "0.1.0"
+description = ""
+authors = ["Pavlo ereshko <pavlo.tereshko@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+asyncpg = "^0.30.0"
+greenlet = "^3.2.3"
+pydantic = {extras = ["email"], version = "^2.11.5"}
+fastapi = "^0.115.12"
+uvicorn = "^0.34.3"
+python-jose = {extras = ["cryptography"], version = "^3.5.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+sqlalchemy = "^2.0.41"
+pydantic-settings = "^2.9.1"
+fastapi-mail = "^1.5.0"
+cloudinary = "^1.44.1"
