@@ -10,6 +10,10 @@ from src.schemas import ContactModel
 
 class ContactsRepository:
     def __init__(self, session: AsyncSession):
+        """Initialize the ContactsRepository.
+        Args:
+            session (AsyncSession): An asynchronous database session.
+        """
         self.db = session
 
     async def get_contacts(self, user: User, skip: int, limit: int) -> List[Contact]:
