@@ -40,3 +40,7 @@ class Token(BaseModel):
 
 class RequestEmail(BaseModel):
     email: EmailStr
+
+
+class TokenRefreshRequest(BaseModel):
+    refresh_token: str

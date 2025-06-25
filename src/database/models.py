@@ -59,3 +59,4 @@ class User(Base):
     is_confirmed: Mapped[bool] = mapped_column(Boolean, default=False)
     avatar: Mapped[str] = mapped_column(String(255), nullable=True)
     role: Mapped[str] = mapped_column(String(8), nullable=False, default="user")
+    refresh_token: Mapped[str] = mapped_column(String(255), nullable=True)

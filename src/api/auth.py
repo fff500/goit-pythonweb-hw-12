@@ -7,10 +7,12 @@ from src.services.email import send_email
 from src.services.auth import (
     Hash,
     create_access_token,
+    create_refresh_token,
     get_current_admin_user,
     get_email_from_token,
+    verify_refresh_token,
 )
-from src.schemas import RequestEmail, Token, UserCreate, UserModel
+from src.schemas import RequestEmail, Token, TokenRefreshRequest, UserCreate, UserModel
 from src.services.users import UserService
 from src.database.db import get_db
 
@@ -88,7 +90,43 @@ async def login_user(
         )
 
     access_token = await create_access_token(data={"sub": user.username})
-    return {"access_token": access_token, "token_type": "bearer"}
+    refresh_token = await create_refresh_token(data={"sub": user.username})
+    user.refresh_token = refresh_token
+    db.commit()
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+    }
+
+
+@router.post("/refresh_token", response_model=Token)
+async def new_token(
+    request: TokenRefreshRequest, db: AsyncSession = Depends(get_db)
+) -> dict:
+    """
+    Refresh the access token using a valid refresh token.
+
+    Args:
+        request (TokenRefreshRequest): The request body containing the refresh token.
+        db (AsyncSession): The database session dependency.
+
+    Returns:
+        dict: A dictionary containing the new access token and the same refresh token.
+    """
+
+    user = await verify_refresh_token(request.refresh_token, db)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired refresh token",
+        )
+    new_access_token = await create_access_token(data={"sub": user.username})
+    return {
+        "access_token": new_access_token,
+        "refresh_token": request.refresh_token,
+        "token_type": "bearer",
+    }
 
 
 @router.get("/confirm_email/{token}")
