@@ -2,8 +2,14 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request,
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.database.models import User
 from src.services.email import send_email
-from src.services.auth import Hash, create_access_token, get_email_from_token
+from src.services.auth import (
+    Hash,
+    create_access_token,
+    get_current_admin_user,
+    get_email_from_token,
+)
 from src.schemas import RequestEmail, Token, UserCreate, UserModel
 from src.services.users import UserService
 from src.database.db import get_db
@@ -141,3 +147,13 @@ async def request_email(
             send_email, user.email, user.username, request.base_url
         )
     return {"message": "Check your email for confirmation link"}
+
+
+@router.get("/public")
+def read_public():
+    return {"message": "This is a public route accessible to everyone"}
+
+
+@router.get("/admin")
+def read_admin(current_user: User = Depends(get_current_admin_user)):
+    return {"message": f"Hello, {current_user.username}! This is an admin route."}

@@ -6,6 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from jose import JWTError, jwt
 
+from src.database.models import User
 from src.services.users import UserService
 from src.database.db import get_db
 from src.conf.config import settings
@@ -124,3 +125,21 @@ def create_email_token(data: dict) -> Token:
     to_encode.update({"iat": datetime.now(UTC), "exp": expire})
     token = jwt.encode(to_encode, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
     return token
+
+
+def get_current_admin_user(current_user: User = Depends(get_current_user)):
+    """
+    Gets the current authenticated admin user.
+
+    Args:
+        current_user (User): The currently authenticated user.
+
+    Returns:
+        User: The authenticated admin user.
+
+    Raises:
+        HTTPException: If the user does not have admin privileges.
+    """
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Insufficient access rights")
+    return current_user

@@ -22,6 +22,7 @@ class UserModel(BaseModel):
     id: int
     email: EmailStr
     username: str
+    role: str
 
     model_config = ConfigDict(from_attributes=True, str_strip_whitespace=True)
 
