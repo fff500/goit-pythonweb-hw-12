@@ -135,12 +135,9 @@ class ContactsRepository:
 
         contact = await self.get_contact_by_id(user, contact_id)
         if contact:
-            contact.first_name = body.first_name
-            contact.last_name = body.last_name
-            contact.email = body.email
-            contact.phone = body.phone
-            contact.birth_date = body.birth_date
-            contact.description = body.description
+            for key, value in body.model_dump(exclude_unset=True).items():
+                setattr(contact, key, value)
+
             await self.db.commit()
             await self.db.refresh(contact)
         return contact

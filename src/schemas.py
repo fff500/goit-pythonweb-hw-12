@@ -1,14 +1,14 @@
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 from datetime import date
 from typing import Optional
 
 
 class ContactModel(BaseModel):
     first_name: str
-    last_name: str
+    last_name: Optional[str] = Field(default=None, max_length=30)
     email: EmailStr
-    phone: str
-    birth_date: date
+    phone: Optional[str] = Field(default=None, max_length=12)
+    birth_date: Optional[date] = Field(default=None)
     description: Optional[str] = None
 
 
