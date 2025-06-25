@@ -10,10 +10,10 @@ from src.database.models import User
 from src.schemas import UserCreate
 
 
-class UserRepository:
+class UsersRepository:
     def __init__(self, session: AsyncSession):
         """
-        Initialize the UserRepository.
+        Initialize the UsersRepository.
 
         Args:
             session (AsyncSession): An asynchronous database session.

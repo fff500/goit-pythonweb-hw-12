@@ -1,13 +1,13 @@
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.repository.users import UserRepository
+from src.repository.users import UsersRepository
 from src.schemas import UserCreate
 
 
 class UserService:
     def __init__(self, db: AsyncSession):
-        self.repository = UserRepository(db)
+        self.repository = UsersRepository(db)
 
     async def create_user(self, body: UserCreate):
         return await self.repository.create_user(body)
