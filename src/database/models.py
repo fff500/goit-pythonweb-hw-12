@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, Enum, ForeignKey, Integer, String
 from sqlalchemy.orm import mapped_column, Mapped, DeclarativeBase, relationship
 from sqlalchemy.sql.sqltypes import DateTime
 
@@ -38,6 +38,11 @@ class Contact(Base):
     user = relationship("User", backref="contacts")
 
 
+class UserRole(str, Enum):
+    USER = "user"
+    ADMIN = "admin"
+
+
 class User(Base):
     """
     Represents a user in the database.
@@ -58,5 +63,5 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
     is_confirmed: Mapped[bool] = mapped_column(Boolean, default=False)
     avatar: Mapped[str] = mapped_column(String(255), nullable=True)
-    role: Mapped[str] = mapped_column(String(8), nullable=False, default="user")
+    role: Mapped[str] = mapped_column(String(8), nullable=False, default=UserRole.USER)
     refresh_token: Mapped[str] = mapped_column(String(255), nullable=True)

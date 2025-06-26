@@ -7,7 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from jose import JWTError, jwt
 
-from src.database.models import User
+from src.database.models import User, UserRole
 from src.services.users import UserService
 from src.database.db import get_db
 from src.conf.config import settings
@@ -217,6 +217,6 @@ def get_current_admin_user(current_user: User = Depends(get_current_user)):
     Raises:
         HTTPException: If the user does not have admin privileges.
     """
-    if current_user.role != "admin":
+    if current_user.role != UserRole.ADMIN:
         raise HTTPException(status_code=403, detail="Insufficient access rights")
     return current_user
