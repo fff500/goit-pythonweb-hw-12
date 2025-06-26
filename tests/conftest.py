@@ -33,6 +33,17 @@ test_user = {
 }
 
 
+test_admin_user = User(
+    id=7,
+    username="raccoon",
+    email="raccoon@example.com",
+    avatar="https://twitter.com/raccoon",
+    role="admin",
+    is_confirmed=True,
+    refresh_token="refresh_token",
+)
+
+
 @pytest.fixture(scope="module", autouse=True)
 def init_models_wrap():
     async def init_models():
