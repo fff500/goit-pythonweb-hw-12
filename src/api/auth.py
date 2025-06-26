@@ -92,7 +92,7 @@ async def login_user(
     access_token = await create_access_token(data={"sub": user.username})
     refresh_token = await create_refresh_token(data={"sub": user.username})
     user.refresh_token = refresh_token
-    db.commit()
+    await db.commit()
     return {
         "access_token": access_token,
         "refresh_token": refresh_token,
